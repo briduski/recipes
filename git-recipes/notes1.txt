@@ -1,0 +1,141 @@
+Git under the hood
+
+Git object types
+Blob          -  git stores files.                   Repr single file
+Tree          -  git stores info about directories.  Repr directory/folder
+Commit        -  git stores version of our project
+Annotated Tag -  specific tag/text pointing to specific commit
+
+Management of Blob & Tree - low-level git commands
++git hash-object => create new object in git structure
++git cat-object  => read git objects
+git cat-file -p hash => content of the object
+ Example git cat-file -p 8d0e41234f24b6da002d962a26c2495ea16a425f
+git cat-file -s hash => size of the object
+git cat-file -t hash => type of the object
+
++git mktree      => create new tree object
+
+==================
+1. Exercise
+p1mac078:playing-low-level a01422$ echo "hello git" | git hash-object --stdin
+8d0e41234f24b6da002d962a26c2495ea16a425f
+
+p1mac078:playing-low-level a01422$ echo "hello git" | git hash-object --stdin -w
+8d0e41234f24b6da002d962a26c2495ea16a425f
+sha1:  021d153ca2ec1771bb2b0ca33031f9ef5e6946bd
+
+-- go to .git/objects/8d/, make ls: 0e41234f24b6da002d962a26c2495ea16a425f    => Hash: dir+file-name
+
+p1mac078:.git a01422$ echo "hello git" | shasum
+d6a96ae3b442218a91512b9e1c57b9578b487a0b  -
+p1mac078:.git a01422$
+p1mac078:.git a01422$ echo "Hello, Git" | shasum
+c9d5d04925b93d2fb99c73ab2b5869bde7405ca4  -
+
+2. Exercise
+p1mac078:playing-low-level a01422$  git hash-object ../notes.txt -w
+4b78009120cc802c56455cc5e3e94b7288c5c72d
+
+git cat-file -p 4b78009120cc802c56455cc5e3e94b7288c5c72d
+
+3.Exercise
+3.1-p1mac078:playing-low-level a01422$ echo -e "Second file in Git repository" | git hash-object --stdin -w
+4400aae52a27341314f423095846b1f215a7cf08
+
+3.2-p1mac078:playing-low-level a01422$ git cat-file -s 4400aae52a27341314f423095846b1f215a7cf08
+   30
+3.3-p1mac078:playing-low-level a01422$ echo -e "blob 30\0Second file in Git repository" | shasum
+4400aae52a27341314f423095846b1f215a7cf08  -
+==================
+
+@Hash functions are a "one way" functions.
+@Hash functions: same input will produce always the same hash.
+
+Popular hash functions: MD5, SHA1 [160 bits, 40 hx char], SHA256,S SHA384, SHA512
+
+Git Object
+[ Content + Object type + Object Lenght + Delimiter (\0) ] Hash
+
+Tree
+Permission + object type + sha1 hash + name of the file/directory
+
+Git objects permissions:
+040000 Directory (trees)
+100644 Regular non-executable file
+100664 Regular non-executable group-writeable file
+100755 Regular executable file
+120000 Symbolic link
+160000 Gitlink
+
+========================
+Exercise
+p1mac078:playing-low-level a01422$ find .git/objects/ -type f
+.git/objects//4b/78009120cc802c56455cc5e3e94b7288c5c72d
+.git/objects//44/00aae52a27341314f423095846b1f215a7cf08
+.git/objects//8d/0e41234f24b6da002d962a26c2495ea16a425f
+
+Create file with Tree content => done temp-tree.txt
+
+p1mac078:playing-low-level a01422$ cat ../temp-tree.txt
+
+Create tree object:
+p1mac078:playing-low-level a01422$ cat ../temp-tree.txt | git mktree
+9f470c5d1c1fa50afb5f339b1c6f600579579ab5
+
+p1mac078:playing-low-level a01422$ find .git/objects/ -type f
+.git/objects//4b/78009120cc802c56455cc5e3e94b7288c5c72d
+.git/objects//44/00aae52a27341314f423095846b1f215a7cf08
+.git/objects//9f/470c5d1c1fa50afb5f339b1c6f600579579ab5
+.git/objects//8d/0e41234f24b6da002d962a26c2495ea16a425f
+
+Read the tree object created
+.git/objects//8d/0e41234f24b6da002d962a26c2495ea16a425f
+p1mac078:playing-low-level a01422$  git cat-file -p 9f470c
+100644 blob 4400aae52a27341314f423095846b1f215a7cf08	file1.txt
+100644 blob 8d0e41234f24b6da002d962a26c2495ea16a425f	file2.txt
+
+p1mac078:playing-low-level a01422$  git cat-file -t 9f470c
+tree
+p1mac078:playing-low-level a01422$  git cat-file -s 9f470c
+74
+========================
+GIT DB:
+DB1- Working directory
+DB2- Staging area (index)
+DB3- Git repository
+_______DB1 <=> DB2 <=> DB3_____
+       DB1 <=> DB2 <= (git read-tree <hash>) <== DB3
+       DB1 <= (git checkout-idex -a)<== DB2 <=  DB3
+       DB1 = git add - Stage=> DB2 = git commit - Commit => DB3
+       DB1<= git checkout, jump to a cetain version =  DB3
+
++Staging area = index. Responsible for
+    - preparing file to be inserted into git repo
+    - preparing file taken from git repo to be inserted into working directory
+
+command: list files in the staging area: git ls-files -s
+command:
+
+========================
+git ls-files -s
+now it is empty
+
++Sent to staging area the tree
+ p1mac078:playing-low-level a01422$ git read-tree 9f470
+now staging area is not empty
+p1mac078:playing-low-level a01422$ git ls-files -s
+100644 4400aae52a27341314f423095846b1f215a7cf08 0	file1.txt
+100644 8d0e41234f24b6da002d962a26c2495ea16a425f 0	file2.txt
+
++Sent to working area
+ git checkout-index -a
+ p1mac078:playing-low-level a01422$ ls
+ file1.txt	file2.txt
+========================
+
+Commit: wrapper for a tree object, contains a pointer to a specific tree
+Autor name & email
+Commit description
+Parent, pointer to parent commit
+=> every commit has its own sha1 hash

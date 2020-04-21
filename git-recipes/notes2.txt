@@ -1,0 +1,57 @@
+Configure git - first time
+  git config --global user.name "your-name"
+  git config --global user.email "email"
+
+   git config --get user.email
+   git config --get user.name
+   git config --list
+
+
+git commit -m "Our very first commit in the project"
+[master (root-commit) 8f7df69] Our very first commit in the project
+ 2 files changed, 2 insertions(+)
+ create mode 100644 file1.txt
+ create mode 100644 file2.txt
+
+.git/objects//8f/7df69a9ea927104ba5eaff6346af6fea94cfca
+
+p1mac078:playing-low-level a01422$  git cat-file -t 8f7df
+commit
+p1mac078:playing-low-level a01422$  git cat-file -s 8f7df
+249
+p1mac078:playing-low-level a01422$  git cat-file -p 8f7df
+tree 9f470c5d1c1fa50afb5f339b1c6f600579579ab5
+author a01422 <rita-maria.arencibia-rodriguez@norsk-tipping.no> 1587309734 +0200
+committer a01422 <rita-maria.arencibia-rodriguez@norsk-tipping.no> 1587309734 +0200
+
+Our very first commit in the project
+====
+At this point, we have file1.txt and file2.txt in the 3 DB:
+- working directory: ls
+                        file1.txt	file2.txt
+- staging area:   git ls-files -s
+               100644 4400aae52a27341314f423095846b1f215a7cf08 0	file1.txt
+               100644 8d0e41234f24b6da002d962a26c2495ea16a425f 0	file2.txt
+- git repo: find .git/objects/ -type f
+.git/objects//8d/0e41234f24b6da002d962a26c2495ea16a425f
+.git/objects//44/00aae52a27341314f423095846b1f215a7cf08
+
+
+==================
+git status    (current state of Git repo)
+git add       (add finles to staging area)
+git commit    (write changes to Git repo) create commit, tree, blobs objects
+git log       (history of changes - commits)
+git checkout  (checkout commit or branch) files are taking from git repo and placed into working directory
+
+every file in git has a status:
+untracked, modified, staged, unmodified
+================
+p1mac078:playing-low-level a01422$ cat file3.txt
+This is third file in our Git repository
+
+p1mac078:playing-low-level a01422$ git add file3.txt
+p1mac078:playing-low-level a01422$ git ls-files
+file1.txt
+file2.txt
+file3.txt
