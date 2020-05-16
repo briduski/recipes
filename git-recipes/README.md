@@ -6,6 +6,7 @@ Git recipes
 
 | Action you want to do      |   Git command   |  Comment / Equivalent to|
 | ------------- |:-------------:| ---:|
+|STATUS|||
 |Show you your current branch and changed files     | git status| |
 |"" and the changed code     | git status -v| |
 |ADD|||
