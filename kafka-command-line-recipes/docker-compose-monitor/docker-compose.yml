@@ -1,0 +1,158 @@
+---
+version: "3"
+services:
+  zk1:
+    image: confluentinc/cp-zookeeper:5.2.1
+    restart: always
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVERS: zk1:2888:3888;zk2:2888:3888;zk3:2888:3888
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/zookeeper/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/zookeeper/jmx_exporter/zookeeper-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/zookeeper/jmx_exporter:ro
+  zk2:
+    image: confluentinc/cp-zookeeper:5.2.1
+    restart: always
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVERS: zk1:2888:3888;zk2:2888:3888;zk3:2888:3888
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/zookeeper/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/zookeeper/jmx_exporter/zookeeper-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/zookeeper/jmx_exporter:ro
+  zk3:
+    image: confluentinc/cp-zookeeper:5.2.1
+    restart: always
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVERS: zk1:2888:3888;zk2:2888:3888;zk3:2888:3888
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/zookeeper/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/zookeeper/jmx_exporter/zookeeper-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/zookeeper/jmx_exporter:ro
+
+  kafka1:
+    image: confluentinc/cp-kafka:5.2.1
+    restart: always
+    depends_on:
+      - zk1
+      - zk2
+      - zk3
+    ports:
+      - 19092:19092
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181,zk2:2181,zk3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:19092
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/kafka/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/kafka/jmx_exporter/kafka-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/kafka/jmx_exporter:ro
+
+
+  kafka2:
+    image: confluentinc/cp-kafka:5.2.1
+    restart: always
+    depends_on:
+      - zk1
+      - zk2
+      - zk3
+    ports:
+      - 29092:29092
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181,zk2:2181,zk3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/kafka/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/kafka/jmx_exporter/kafka-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/kafka/jmx_exporter:ro
+
+  kafka3:
+    image: confluentinc/cp-kafka:5.2.1
+    restart: always
+    depends_on:
+      - zk1
+      - zk2
+      - zk3
+    ports:
+      - 39092:39092
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181,zk2:2181,zk3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092,PLAINTEXT_HOST://localhost:39092
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/kafka/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/kafka/jmx_exporter/kafka-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/kafka/jmx_exporter:ro
+
+  kafka4:
+    image: confluentinc/cp-kafka:5.2.1
+    restart: always
+    depends_on:
+      - zk1
+      - zk2
+      - zk3
+    ports:
+      - 49092:49092
+    environment:
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_BROKER_ID: 4
+      KAFKA_ZOOKEEPER_CONNECT: zk1:2181,zk2:2181,zk3:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka4:9092,PLAINTEXT_HOST://localhost:49092
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/kafka/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/kafka/jmx_exporter/kafka-config.yml "
+    volumes:
+      - ./jmx_exporter:/usr/share/kafka/jmx_exporter:ro
+
+  schema-registry1:
+    image: confluentinc/cp-schema-registry:5.2.1
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: localhost
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zk1:2181,zk2:2181,zk3:2181'
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:9092,PLAINTEXT://kafka2:9092,PLAINTEXT://kafka3:9092,PLAINTEXT://kafka4:9092
+      SCHEMA_REGISTRY_OPTS: '-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -javaagent:/usr/share/schema-registry/jmx_exporter/javaagent-0.11.0.jar=6666:/usr/share/schema-registry/jmx_exporter/schema-registry-config.yml'
+    volumes:
+      - ./jmx_exporter:/usr/share/schema-registry/jmx_exporter:ro
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - zk1
+      - zk2
+      - zk3
+
+# https://hub.docker.com/r/prom/prometheus
+  prometheus:
+    image: prom/prometheus:v2.10.0
+    restart: always
+    ports:
+      - 9091:9090
+    volumes:
+      - ./jmx_exporter/prometheus/config.yml:/etc/prometheus/prometheus.yml
+
+# https://hub.docker.com/r/grafana/grafana/tags
+  grafana:
+    image: grafana/grafana:6.2.1
+    ports:
+      - 3000:3000
