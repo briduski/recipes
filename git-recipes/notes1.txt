@@ -30,7 +30,7 @@ sha1:  021d153ca2ec1771bb2b0ca33031f9ef5e6946bd
 p1mac078:.git a01422$ echo "hello git" | shasum
 d6a96ae3b442218a91512b9e1c57b9578b487a0b  -
 p1mac078:.git a01422$
-p1mac078:.git a01422$ echo "Hello, Git" | shasum
+p1mac078:.git a01422$    "Hello, Git" | shasum
 c9d5d04925b93d2fb99c73ab2b5869bde7405ca4  -
 
 2. Exercise
@@ -104,11 +104,15 @@ GIT DB:
 DB1- Working directory
 DB2- Staging area (index)
 DB3- Git repository
-_______DB1 <=> DB2 <=> DB3_____
+DB3- Remote git repository 
+_______DB1 <=> DB2 <=> DB3  <=> DB4
        DB1 <=> DB2 <= (git read-tree <hash>) <== DB3
        DB1 <= (git checkout-idex -a)<== DB2 <=  DB3
        DB1 = git add - Stage=> DB2 = git commit - Commit => DB3
        DB1<= git checkout, jump to a cetain version =  DB3
+       DB3 = git push  => DB4 
+       DB3 <= git fetch(fech updates) = DB4
+       DB1 <= git pull (merge changes from remote) = DB4
 
 +Staging area = index. Responsible for
     - preparing file to be inserted into git repo

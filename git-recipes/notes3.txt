@@ -1,0 +1,75 @@
+git branch                 list all local branches
+git branch <name>          create new branch              =>
+git checkout <name>         checkout specific branch      => git checkout -b <branch-name>
+git branch -d <name>       delete  specific branch
+git branch -m <old> <new>   rename  specific branch
+
+
+Ways to merge:
+**fast-forward merge
+   When there are no further commits in the receiving branch after the commit where the feature branch was created
+    git chekout mater
+    git merge <feature_branch> 
+    optional: git branch -d <feature_branch>    
+
+**3-way merge
+    a<-b<-c<--d<--e [master]
+          ^
+          |
+          |<--f<--g<-- [feature_branch]                   
+
+    a<-b<-c<--d<--e<--- [h]   [master]
+          ^             |  
+          |             |
+          |<--f<--g<--<-| [feature_branch]                   
+          
+[h] => it is a new commit based on the ancestor [c] (common parent for both branches)
+    => has 2 parents: [e] and [g]
+
+
+VS Code
+opt + shift + up/down => duplicate line
+cmd + x => delete line
+
+Remote repository => default name : origin
+
+Tags:
+- lightweight
+git tag v1.0
+ => stored in .git/refs/tags
+- annotated
+git tag -a v1.0 -m "New tag" 
+ => stored in .git/refs/tags && .git/objects 
+
+Rebase: 
+-rewrites history
+-history becomes linear
+-doesn't keep entire history of all commits
+Steps:
+1. checkout feature branch: 
+    git checkout feature1
+2. Rebase feature branch on top of the base branch
+    git rebase master
+    it might happen conflicts, new commit :)
+3. Checkout base branch
+    git checkout master
+4. merge feature branch into the base branch (Fast-forward merge)
+    git merge feature1
+    it might happen conflicts, new commit :)
+    5. git rebase --continue
+
+Merge: all commits will be kept. 
+fast-forward merge => in case no new commits in master.
+3-way-commit       => new commit with 2 parents
+
+Ignore previously committed files
+Option 1
+1. add rule to .gitignore
+2. delete file from working directory
+3. commit changes
+4. Add again previously deleted file
+
+Option 2
+git rm --cached local-file1.txt
+==
+git rm cached local*

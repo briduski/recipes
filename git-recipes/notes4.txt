@@ -1,0 +1,36 @@
+Detached HEAD
+- git checkout <SHA1>
+- and make new commits => it will be created a new flow, like a virtual branch
+- you can 'save' these new commits by creating a branch 
+- or you can 'miss' these new commits making a checkout to other branch
+
+Reset
+default==mixed: 
+
+--soft: git reset --soft <SHA1>
+remove commit from git repo, but keep changes in Staging area and in working directory
+
+--mixed:(default) git reset <SHA1>
+remove commit from git repo, unstage changes, but changes are in working directory
+
+--hard: git reset --hard <SHA1>
+remove commit from git repo, unstage changes, and remove changes from working directory
+
+++ Go back a certain amount of commits
+git reset HEAD~1  ==> mixed 
+
+Revert
+git revert HEAD
+git rever <SHA1>
+
+it might happen conflicts. Fix the files with conflicts, add them to staging area and git revert --continue
+
+CHERRY PICK
+Insert a commit of branch into another branch: git cherry-pick <SHA1>
+
+STASH
+git stash => Insert into stash
+git stash pop => take out the contents of stash 
+
+SQUASH
+Merge commits into 1
