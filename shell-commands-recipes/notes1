@@ -1,0 +1,24 @@
+File system Linux
+
+root/home
+
+root/usr/bin  => binary files, can be run
+root/usr/share => configuration files of the binary app 
+root/usr/share/applications => all of installed app
+
+10 Advanced Linux commands every Programmer should know
+1. lsof
+2. netstat
+3. find
+4. grep
+5. sed
+6. curl
+7. cut
+8. xargs
+9. for
+10. ssh/scp
+11. rsync
+12. awk
+13. nc
+14. tee
+15. wget

@@ -13,12 +13,13 @@ Git recipes
 |Add all modified files (to the future commit == staging area) |git add .||
 |Add a specific file(s) (to the future commit == staging area) |git add path-to-file/filename <p/>git add filename1 filename2 ||
 |LOG|||
-|List the files modifed |git log --name-only --pretty=format: | git log --name-only ** git log --name-status|
+|Shows all files deleted|git log --diff-filter=D --summary | sed -n -e '/^commit/h' -e '\:/:{' -e G -e 's/\ncommit \(.*\)/ \1/gp' -e }||
+|List the files modified |git log --name-only --pretty=format: | git log --name-only ** git log --name-status|
 |-----|git log --stat --pretty="format:" $(git rev-parse --abbrev-ref HEAD)||
 |-----|git log --stat --pretty=short --graph||
+|Show the SHA1 when a file was affected'|git rev-list -n 1 HEAD -- path-to-file||
 |Shows the changes of a specifc file|git log --full-history -- path-to-file |git log --stat | grep filename|
-|Shows all files deleted|git log --diff-filter=D --summary | sed -n -e '/^commit/h' -e '\:/:{' -e G -e 's/\ncommit \(.*\)/ \1/gp' -e }||
-|Show the commit when a file was affected'|git rev-list -n 1 HEAD -- path-to-file||
+|Show the commits, code, where a file was changed|git log -- src/main/java/App.java|git log -p src/main/java/App.java|
 |Get all the commits which have deleted files and the files deleted;|git log --diff-filter=D --summary||
 |Display diff (code changes), introduced in the last commit (-1) |git log -p -1||
 |1-line => every commit: SHA1 + comment |git log --oneline||
@@ -45,6 +46,9 @@ Git recipes
 |Add a tag to specific commit (annotated tag) |git tag -a v1.2 -m "new-tag"||
 |Add a tag to specific commit |git tag -a v1.2 SHA1||
 |See the details of an annotated tag|git tag -v v1.2||
+|See all tags|git tag|git tag -n ==> with details|
+|See all tags remote |git ls-remote --tags||
+|Fetch all tags remote |git fetch --all --tags||
 |Push the commit with the tag |git push -v origin v1.5||
 |Push the commit with all the tags |git push origin branch-name --tags||
 |Create a branch based on tag |git checkout -b feature-3 v2.0.0||
@@ -125,6 +129,7 @@ Git recipes
 |-|git config --global alias.co checkout|git checkout == git co|
 |-|git config --global alias.br branch |git branch == git br|
 |-|git config --global alias.st status|git status == git st |
+|-|git config --global alias.rename 'branch -m'|git -m new-name == git rename |
 |-|git config --global alias.sg 'log --pretty=format:"%h %s" --graph'|simple graph => git sg -5|
 |-|git config --global alias.sch 'log --pretty=format:"%h - %an, %ar : %s"'|simple commit history => git sch -2 |
 |-|git config --global alias.pg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"|pretty graph => git pg -6|

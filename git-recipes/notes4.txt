@@ -34,3 +34,7 @@ git stash pop => take out the contents of stash
 
 SQUASH
 Merge commits into 1
+
+
+UNDO / to discard changes in working directory
+git co -- path-to-file/filename.java

@@ -35,7 +35,7 @@
 
 git fetch -v && git merge FETCH_HEAD  ????
 
-## Recipe #3 Overwrite local files (missing data)
+## Recipe #3 Overwrite local files (you miss data)
 1. git reset --hard HEAD
 2. git pull
 
@@ -96,3 +96,12 @@ git fetch -v && git merge FETCH_HEAD  ????
 4. git add Anyfile.txt
 5. git remote add origin  https://github.com/.git_account./repo_name.git
 6. git push -u origin master
+
+
+## Undo changes in a single file modified only in working directory
+git checkout -- filename.txt
+
+OR
+2020  => git restore filename.txt
+
+https://docs.gitlab.com/ee/topics/git/numerous_undo_possibilities_in_git/
