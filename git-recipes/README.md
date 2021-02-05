@@ -119,8 +119,13 @@ Git recipes
 |see the content of a commit by reading its hash/commit_id |git cat-file -p SHA-1||
 ||||
 |Configure |||
-|user |  git config --global user.name "R, RMA" ||
-|email|  git config --global user.email "email"||
+|see all config settings |git config --list||
+|user (local) |  git config user.name "R, RMA" ||
+|email (local) |  git config user.email "email" ||
+|user (global, all repos)|  git config --global user.name "R, RMA" ||
+|email(global, all repos)|  git config --global user.email "email"||
+|see local-repo config properties| git config --get user.name| | 
+|see global config properties| git config --get --global user.name| | 
 ||||
 |ALIAS|||
 |Setting alias & using alias: see last commit|git config --global alias.last 'log -1 HEAD'|git log -1 HEAD == git last|
@@ -158,7 +163,7 @@ Git recipes
 |Others|||
 |Setting config properties|||
 |Global property|git config —global user.name   "briduski"||
-|Loal -speific-repo property|git config user.name   "briduski"||
+|Local -specific-repo property|git config user.name   "briduski"||
 |Getting config properties|||
 |Global property|git config —global user.name ||
 |Local -speific-repo property|git config user.name  ||
@@ -173,7 +178,9 @@ Git recipes
 |...|git bisect bad||
 |... here you know in which commit was introduced the bug|git bisect good||
 ||git bisect reset||
-
+|-|-|-|
+|OTHERS|||
+|-.-.-.-..-|git commit -m "Nisse" --allow-empty||
 
  Mermaid:
  https://mermaid-js.github.io/mermaid-live-editor/

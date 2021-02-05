@@ -104,4 +104,7 @@ git checkout -- filename.txt
 OR
 2020  => git restore filename.txt
 
+## Remove a file from last commit
+git reset HEAD^ -- path-to-file/filename.java
+
 https://docs.gitlab.com/ee/topics/git/numerous_undo_possibilities_in_git/
