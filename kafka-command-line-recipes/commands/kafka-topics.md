@@ -1,6 +1,6 @@
 # Create a topic
 kafka-topics --create --zookeeper zk1:2181           --topic my-topic --replication-factor 2 --partitions 4  
-kafka-topics --create --bootstrap-server kafka1:9092 --topic toto-3x2 --replication-factor 2 --partitions 3
+kafka-topics --create --bootstrap-server kafka1:9092 --topic toto-3x2 --replication-factor 2 --partitions 3  
 kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact
 
 # List existing topics
